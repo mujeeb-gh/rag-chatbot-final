@@ -1,0 +1,24 @@
+# Misc
+desktop.ini
+.DS_Store
+
+.vscode/
+.idea/
+
+# Dev
+.env
+.env.*
+*.env
+
+.env/
+env/
+.venv/
+venv/
+
+.chroma/
+models/
+embeddings/
+models/
+data/
+
+__pycache__/
