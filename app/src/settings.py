@@ -9,7 +9,8 @@ load_dotenv(find_dotenv())
 SRC_DIR: str = os.path.dirname(__file__)
 DATA_DIR: str = os.path.join(SRC_DIR, "../../data")
 CHROMA_DIR: str = os.path.join(SRC_DIR, "../../.chroma")
-CHROMA_COLLECTION: str = "bge-large-finetuned-chroma"
+MODELS_DIR: str = os.path.join(SRC_DIR, "../../models")
+CHROMA_COLLECTION: str = "bge_large_finetuned_astra_collection"
 
 
 class Settings(BaseSettings):

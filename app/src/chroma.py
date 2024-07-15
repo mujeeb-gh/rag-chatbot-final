@@ -50,7 +50,7 @@ def search(
     k: int = 5,
 ) -> list[dict[str, Any]] | None:
     # Embed the query
-    _embed: list[list[float]] = sentence_embed(texts=query, model_name_or_path="models/bge-large_finetuned")  # type: ignore
+    _embed: list[list[float]] = sentence_embed(texts=query, model_name_or_path="bge-large_finetuned")  # type: ignore 
 
     # Search the collection
     _results: QueryResult = chroma_collection.query(  # type: ignore
@@ -70,34 +70,34 @@ def search(
     return [{"doc": doc, "score": score, "metadata": metadata} for doc, score, metadata in zip(docs, scores, metadatas)]
 
 
-chroma_collection = 'bge_large_finetuned_astra_collection'
-chroma_dir = "embeddings/bge-large-finetuned-chroma"
+# chroma_collection = 'bge_large_finetuned_astra_collection'
+# chroma_dir = "embeddings/bge-large-finetuned-chroma"
 
-chroma_client: ClientAPI = chromadb.PersistentClient(path=chroma_dir)
-chroma_collection: Collection = chroma_client.get_or_create_collection(
-    name=chroma_collection, metadata={"hnsw:space": "cosine"}
-)
-def search_eval(
-    query: str,
-    k: int = 5,
-    model_name_or_path = "BAAI/bge-small-en-v1.5"
-) -> list[dict[str, Any]] | None:
-    # Embed the query
-    _embed: list[list[float]] = sentence_embed(query, model_name_or_path=model_name_or_path)  # type: ignore
+# chroma_client: ClientAPI = chromadb.PersistentClient(path=chroma_dir)
+# chroma_collection: Collection = chroma_client.get_or_create_collection(
+#     name=chroma_collection, metadata={"hnsw:space": "cosine"}
+# )
+# def search_eval(
+#     query: str,
+#     k: int = 5,
+#     model_name_or_path = "BAAI/bge-small-en-v1.5"
+# ) -> list[dict[str, Any]] | None:
+#     # Embed the query
+#     _embed: list[list[float]] = sentence_embed(query, model_name_or_path=model_name_or_path)  # type: ignore
 
-    # Search the collection
-    _results: QueryResult = chroma_collection.query(  # type: ignore
-        query_embeddings=_embed,
-        n_results=k,
-        include=["documents", "distances", "metadatas"],
-    )
+#     # Search the collection
+#     _results: QueryResult = chroma_collection.query(  # type: ignore
+#         query_embeddings=_embed,
+#         n_results=k,
+#         include=["documents", "distances", "metadatas"],
+#     )
 
-    # Return if there is no result
-    if not _results["documents"]:
-        return None
+#     # Return if there is no result
+#     if not _results["documents"]:
+#         return None
 
-    docs: list[str] = _results["documents"][0] if _results["documents"] else []
-    scores: list[float] = _results["distances"][0] if _results["distances"] else []
-    metadatas = _results["metadatas"][0] if _results["metadatas"] else []
+#     docs: list[str] = _results["documents"][0] if _results["documents"] else []
+#     scores: list[float] = _results["distances"][0] if _results["distances"] else []
+#     metadatas = _results["metadatas"][0] if _results["metadatas"] else []
 
-    return [{"doc": doc, "score": score, "metadata": metadata} for doc, score, metadata in zip(docs, scores, metadatas)]
+#     return [{"doc": doc, "score": score, "metadata": metadata} for doc, score, metadata in zip(docs, scores, metadatas)]

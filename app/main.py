@@ -10,6 +10,7 @@ st.set_page_config(page_title="Chat-B.O.A", page_icon="🗨️", layout="centere
 st.title(":grey[Chat-B.O.A]")
 st.subheader("Development of a Chatbot for Scholarly Research using Retrieval Augmented Generation \n Balogun Olamide Abdulmujeeb \n\n 20/SCI01/042", divider="grey", anchor=False)
 
+disclaimer = "Disclaimer: This chatbot is specifically for natural language processing research and retrieves information from 2022 ACL Anthology papers only."
 
 if "messages" not in st.session_state:
     _messages: list[Any] = []
@@ -18,6 +19,7 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+        
 
 if prompt := st.chat_input("Type a Message..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -64,3 +66,5 @@ if prompt := st.chat_input("Type a Message..."):
 
             st.write_stream(astra_stream(response))
             st.session_state.messages.append({"role": "assistant", "content": response})
+
+st.markdown(f"<div style='text-align: center; color: gray; margin-top: auto;'>{disclaimer}</div>", unsafe_allow_html=True)

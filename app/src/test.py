@@ -18,58 +18,75 @@
 
 from pprint import pprint as print
 
-rel = [{'doc': 'predictive models especially when formula is an essential '
-         'differentiating part of a task conclusion future work we proposed an '
-         'adaptation of an nlp technique liu et al 2017 from the field of '
-         'machine comprehension to the area of mathematical educational data '
-         'mining we enrich the content representation by parsing mathematical '
-         'formulas into syntax trees and embedding them with neural networks '
-         'our experiments validate the approach using publicly available '
-         'datasets and show that incorporating syntactic information can '
-         'improve performance in predicting the difficulty of an exercise '
-         'these results suggest that the method may be of interest for '
-         'personalised learning solutions we',
-  'metadata': {'title': 'structural information in mathematical formulas for '
-                        'exercise difficulty prediction a comparison of nlp '
-                        'representations',
-               'url': 'https://aclanthology.org/2022.bea-1.14'},
-  'score': 0.2975524663925171},
- {'doc': 'monitoring validation loss with the patience of 3 epochs results we '
-         'compare data representations to investigate whether adding syntactic '
-         'sequences improves classification performance performance was '
-         'evaluated using 10fold stratified crossvalidation roc auc and is '
-         'shown in table 1 regarding the baselines majority and random '
-         'baselines produce roc auc of 05 on a single run and the best results '
-         'of logistic regression models trained on the length of input '
-         'sequences are 057 for math on descriptions and 066 for deepmind on '
-         'formula respectively regarding other possible neural approaches to '
-         'feature engineering using word2vec algorithm mikolov et al 2013 to '
-         'produce pretrained',
-  'metadata': {'title': 'structural information in mathematical formulas for '
-                        'exercise difficulty prediction a comparison of nlp '
-                        'representations',
-               'url': 'https://aclanthology.org/2022.bea-1.14'},
-  'score': 0.3195769786834717},
- {'doc': 'using reinforcement learning wang and jin 2019 adversarial learning '
-         'wang et al 2021b wang et al 2020b and also the multimodel structure '
-         'to handle the unknown entities in question answering wang et al 2018 '
-         'wang et al 2020a coreference understanding wang et al 2021a is also '
-         'another research direction in designing questionanswering systems '
-         'conclusion in this paper we introduce a novel mrpqa knowledge based '
-         'question answering system which can leverage information from mrps '
-         'to train our model we use a marginalized probability objective '
-         'function experimental results show that our model achieve strong '
-         'performance on popular kbqa datasets',
-  'metadata': {'title': 'a new concept of knowledge based question answering '
-                        'kbqa system for multihop reasoning',
-               'url': 'https://aclanthology.org/2022.naacl-main.294'},
-  'score': 0.3206987977027893}]
+# rel = [{'doc': 'predictive models especially when formula is an essential '
+#          'differentiating part of a task conclusion future work we proposed an '
+#          'adaptation of an nlp technique liu et al 2017 from the field of '
+#          'machine comprehension to the area of mathematical educational data '
+#          'mining we enrich the content representation by parsing mathematical '
+#          'formulas into syntax trees and embedding them with neural networks '
+#          'our experiments validate the approach using publicly available '
+#          'datasets and show that incorporating syntactic information can '
+#          'improve performance in predicting the difficulty of an exercise '
+#          'these results suggest that the method may be of interest for '
+#          'personalised learning solutions we',
+#   'metadata': {'title': 'structural information in mathematical formulas for '
+#                         'exercise difficulty prediction a comparison of nlp '
+#                         'representations',
+#                'url': 'https://aclanthology.org/2022.bea-1.14'},
+#   'score': 0.2975524663925171},
+#  {'doc': 'monitoring validation loss with the patience of 3 epochs results we '
+#          'compare data representations to investigate whether adding syntactic '
+#          'sequences improves classification performance performance was '
+#          'evaluated using 10fold stratified crossvalidation roc auc and is '
+#          'shown in table 1 regarding the baselines majority and random '
+#          'baselines produce roc auc of 05 on a single run and the best results '
+#          'of logistic regression models trained on the length of input '
+#          'sequences are 057 for math on descriptions and 066 for deepmind on '
+#          'formula respectively regarding other possible neural approaches to '
+#          'feature engineering using word2vec algorithm mikolov et al 2013 to '
+#          'produce pretrained',
+#   'metadata': {'title': 'structural information in mathematical formulas for '
+#                         'exercise difficulty prediction a comparison of nlp '
+#                         'representations',
+#                'url': 'https://aclanthology.org/2022.bea-1.14'},
+#   'score': 0.3195769786834717},
+#  {'doc': 'using reinforcement learning wang and jin 2019 adversarial learning '
+#          'wang et al 2021b wang et al 2020b and also the multimodel structure '
+#          'to handle the unknown entities in question answering wang et al 2018 '
+#          'wang et al 2020a coreference understanding wang et al 2021a is also '
+#          'another research direction in designing questionanswering systems '
+#          'conclusion in this paper we introduce a novel mrpqa knowledge based '
+#          'question answering system which can leverage information from mrps '
+#          'to train our model we use a marginalized probability objective '
+#          'function experimental results show that our model achieve strong '
+#          'performance on popular kbqa datasets',
+#   'metadata': {'title': 'a new concept of knowledge based question answering '
+#                         'kbqa system for multihop reasoning',
+#                'url': 'https://aclanthology.org/2022.naacl-main.294'},
+#   'score': 0.3206987977027893}]
 
-url = [result['metadata']['url'] for result in rel]
+# url = [result['metadata']['url'] for result in rel]
 
-context = []
-for result in rel:
-  context.append(f'{result["doc"]}=={result["metadata"]["url"]}')
+# context = []
+# for result in rel:
+#   context.append(f'{result["doc"]}=={result["metadata"]["url"]}')
   
-print(context)
+# print(context)
   
+from .chroma import search
+q = 'What is Retrieval Augmented Generation'
+results = search("What is Retrieval Augmented Generation", 3)
+if results:
+    for result in results:
+        print(result)
+else:
+    print("No relevant documents found.")
+
+import os
+from .settings import MODELS_DIR
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+model = SentenceTransformer(os.path.join(MODELS_DIR, 'bge-large_finetuned'))
+embeddings: np.ndarray = model.encode(sentences=q, device='cpu', show_progress_bar=True)
+# print(embeddings)
