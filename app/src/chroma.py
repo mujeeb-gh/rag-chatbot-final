@@ -50,7 +50,7 @@ def search(
     k: int = 5,
 ) -> list[dict[str, Any]] | None:
     # Embed the query
-    _embed: list[list[float]] = sentence_embed(texts=query, model_name_or_path="bge-large_finetuned")  # type: ignore 
+    _embed: list[list[float]] = sentence_embed(texts=query, model_name_or_path="bge-small_finetuned")  # type: ignore 
 
     # Search the collection
     _results: QueryResult = chroma_collection.query(  # type: ignore
