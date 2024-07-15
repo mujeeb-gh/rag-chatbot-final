@@ -89,13 +89,19 @@ def astra_intent_classifier(prompt: str) -> str:
         str: The classified intent.
 
     """
-    return groq_chat(
+    response = groq_chat(
         message=prompt,
         preamble=INTENT_CLASSIFIER_TEMPLATE.format(
             intents="- ".join([f"{intent}\n" for intent in CLASSIFIER_INTENTS])
         ),
         model="mixtral-8x7b-32768",
-    ).choices[0].message.content
+    )
+    
+    if "error" in response:
+        # Handle the error gracefully by returning a default message or intent
+        return response["error"]
+    
+    return response.choices[0].message.content
     
 def astra_stream(response: str):
     for word in response.split(" "):
