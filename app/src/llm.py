@@ -1,5 +1,5 @@
 from typing import Literal 
-from groq import Groq, InternalServerError
+from groq import Groq
 from src.settings import settings
 
 CHAT_MODEL = Literal["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
@@ -51,21 +51,18 @@ def groq_chat(
     })
 
     # Create the chat completion
-    try:
-        chat_completion = client.chat.completions.create(
-            messages=messages,
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=top_p,
-            stop=stop,
-            stream=stream,
-        )
+    chat_completion = client.chat.completions.create(
+        messages=messages,
+        model=model,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        top_p=top_p,
+        stop=stop,
+        stream=stream,
+    )
 
-        # Return the response
-        return chat_completion
-    except InternalServerError:
-        return{"error": "Groq server is currently unavailable. Please try again later."}
+    # Return the response
+    return chat_completion
 
 # # Example usage
 # response = groq_chat(

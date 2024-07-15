@@ -15,10 +15,9 @@ env/
 .venv/
 venv/
 
-# .chroma/
+.chroma/
 embeddings/
 data/
-# models/
-other_models/
+models/
 
 __pycache__/
