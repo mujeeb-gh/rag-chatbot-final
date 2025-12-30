@@ -73,20 +73,57 @@ from pprint import pprint as print
   
 # print(context)
   
-from .chroma import search
-q = 'What is Retrieval Augmented Generation'
-results = search("What is Retrieval Augmented Generation", 3)
-if results:
-    for result in results:
-        print(result)
-else:
-    print("No relevant documents found.")
+# from .chroma import search
+# q = 'What is Retrieval Augmented Generation'
+# results = search("What is Retrieval Augmented Generation", 3)
+# if results:
+#     for result in results:
+#         print(result)
+# else:
+#     print("No relevant documents found.")
 
-import os
-from .settings import MODELS_DIR
-from sentence_transformers import SentenceTransformer
-import numpy as np
+# import os
+# from .settings import MODELS_DIR
+# from sentence_transformers import SentenceTransformer
+# import numpy as np
 
-model = SentenceTransformer(os.path.join(MODELS_DIR, 'bge-large_finetuned'))
-embeddings: np.ndarray = model.encode(sentences=q, device='cpu', show_progress_bar=True)
-# print(embeddings)
+# model = SentenceTransformer(os.path.join(MODELS_DIR, 'bge-large_finetuned'))
+# embeddings: np.ndarray = model.encode(sentences=q, device='cpu', show_progress_bar=True)
+# # print(embeddings)
+
+import re
+
+def extract_intent(text):
+    """
+    Extracts the intent from the given text.
+    
+    Args:
+        text (str): The text to search for an intent.
+    
+    Returns:
+        str: The extracted intent ('open-ended', 'query', 'out of scope') if found, otherwise None.
+    """
+    # Define the regex pattern to match any of the intents
+    pattern = r'\b(open-ended|query|out of scope)\b'
+    
+    # Search for the pattern in the input text (case insensitive)
+    match = re.search(pattern, text, re.IGNORECASE)
+    
+    # Return the matched intent if found, else None
+    if match:
+        return match.group(1).lower()
+    else:
+        return None
+
+# Example usage:
+response = "This is an open-ended question, so it should be classified as such."
+print(extract_intent(response))  # Output: "open-ended"
+
+response = "Please classify this query as a question."
+print(extract_intent(response))  # Output: "query"
+
+response = "I am sorry, but this request is out of scope for me to handle."
+print(extract_intent(response))  # Output: "out of scope"
+
+response = "This is a completely unrelated response."
+print(extract_intent(response))  # Output: None

@@ -4,7 +4,7 @@
 ## Setup
 To setup this project locally, you need to have a `.env` file in the root directory with the following variables:
 
-
+.venv is the new virtual env
 
 
 Then, install the dependencies:

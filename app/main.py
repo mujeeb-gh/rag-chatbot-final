@@ -38,7 +38,7 @@ if prompt := st.chat_input("Type a Message..."):
 
             # Check if there are any results
             if not context:
-                response: str = "I'm sorry, I don't have any information on that. Feel free to ask me anything else."
+                response: str = "I'm sorry, I don't have any information on that. Feel free to ask me anything else within NLP research."
 
                 st.markdown(response)
                 st.session_state.messages.append(

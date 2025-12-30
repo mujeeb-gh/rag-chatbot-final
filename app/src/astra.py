@@ -1,18 +1,42 @@
 import time
 import streamlit
-from src.llm import groq_chat
+from src.llm import groq_chat, openrouter_chat
 from src.template import CHAT_TEMPLATE, INTENT_CLASSIFIER_TEMPLATE, RAG_TEMPLATE, RAG_EVAL_TEMPLATE
 
 
 CLASSIFIER_INTENTS: list[str] = [
-    "inquiry",
-    "greeting",
-    "goodbye",
-    "compliment",
-    "feedback",
+    # "greeting",
+    # "goodbye",
+    # "compliment",
+    # "feedback",
+    "open-ended",
     "query",
+    "out-of-scope"
 ]
 
+import re
+
+def extract_intent(text):
+    """
+    Extracts the intent from the given text.
+    
+    Args:
+        text (str): The text to search for an intent.
+    
+    Returns:
+        str: The extracted intent ('open-ended', 'query', 'out of scope') if found, otherwise None.
+    """
+    # Define the regex pattern to match any of the intents
+    pattern = r'\b(open-ended|query|out-of-scope)\b'
+    
+    # Search for the pattern in the input text (case insensitive)
+    match = re.search(pattern, text, re.IGNORECASE)
+    
+    # Return the matched intent if found, else None
+    if match:
+        return match.group(1).lower()
+    else:
+        return None
 
 def astra_chat(message: str, chat_history: list[dict] | None = None) -> str:
     """
@@ -25,10 +49,10 @@ def astra_chat(message: str, chat_history: list[dict] | None = None) -> str:
     Returns:
         str: The response from the chatbot.
     """
-    return groq_chat(
+    return openrouter_chat(
         message=message,
         preamble=CHAT_TEMPLATE,
-        model="mixtral-8x7b-32768",
+        # model="mixtral-8x7b-32768",
         chat_history=chat_history,
     ).choices[0].message.content
 
@@ -37,7 +61,7 @@ def astra_rag(
     prompt: str, context: list[str], chat_history: list[dict] | None = None
 ) -> str:
     """
-    Generates a response using the RAG (Retrieve, Aggregate, Generate) model.
+    Generates a response using the RAG (Retrieve, Augment, Generate) model.
 
     Args:
         prompt (str): The prompt for generating the response.
@@ -48,10 +72,10 @@ def astra_rag(
         str: The generated response.
 
     """
-    return groq_chat(
+    return openrouter_chat(
         message=prompt,
         preamble=RAG_TEMPLATE.format(context="\n\n".join(context)),
-        model="mixtral-8x7b-32768",
+        # model="mixtral-8x7b-32768",
         chat_history=chat_history,
     ).choices[0].message.content
 
@@ -60,7 +84,7 @@ def astra_rag_eval(
     prompt: str, context: list[str], chat_history: list[dict] | None = None
 ) -> str:
     """
-    Generates a response using the RAG (Retrieve, Aggregate, Generate) model.
+    Generates a response using the RAG (Retrieve, Augment, Generate) model.
 
     Args:
         prompt (str): The prompt for generating the response.
@@ -71,10 +95,10 @@ def astra_rag_eval(
         str: The generated response.
 
     """
-    return groq_chat(
+    return openrouter_chat(
         message=prompt,
         preamble=RAG_EVAL_TEMPLATE.format(context="\n\n".join(context)),
-        model="mixtral-8x7b-32768",
+        # model="mixtral-8x7b-32768",
         chat_history=chat_history,
     ).choices[0].message.content
 
@@ -89,12 +113,12 @@ def astra_intent_classifier(prompt: str) -> str:
         str: The classified intent.
 
     """
-    response = groq_chat(
+    response = openrouter_chat(
         message=prompt,
         preamble=INTENT_CLASSIFIER_TEMPLATE.format(
             intents="- ".join([f"{intent}\n" for intent in CLASSIFIER_INTENTS])
         ),
-        model="mixtral-8x7b-32768",
+        # model="mixtral-8x7b-32768",
     )
     
     if "error" in response:
