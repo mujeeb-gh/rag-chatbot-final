@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     cohere_api_key: str = ""
     groq_api_key: str = ""
     openai_api_key: str = ""
+    openrouter_api_key: str = ""
+    # HuggingFace Hub configuration
+    hf_models_repo: str = os.getenv("HF_MODELS_REPO", "")
+    hf_chromadb_repo: str = os.getenv("HF_CHROMADB_REPO", "")
+    hf_token: str = os.getenv("HF_TOKEN", "")
 
 
 settings = Settings()

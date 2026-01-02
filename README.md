@@ -6,6 +6,17 @@ To setup this project locally, you need to have a `.env` file in the root direct
 
 .venv is the new virtual env
 
+### Environment Variables
+
+Required for API keys:
+- `GROQ_API_KEY`: Your Groq API key (for LLM)
+- `OPENAI_API_KEY`: Your OpenAI API key (optional, for OpenAI models)
+- `COHERE_API_KEY`: Your Cohere API key (optional)
+
+For Docker deployment with HuggingFace Hub:
+- `HF_MODELS_REPO`: HuggingFace Hub repository for models (e.g., "username/astra-models")
+- `HF_CHROMADB_REPO`: HuggingFace Hub repository for ChromaDB embeddings (e.g., "username/astra-chromadb")
+- `HF_TOKEN`: HuggingFace Hub token (required for private repositories)
 
 Then, install the dependencies:
 
@@ -18,6 +29,40 @@ Without development dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+## Docker Deployment
+
+The Dockerfile is configured to automatically download models and ChromaDB embeddings from HuggingFace Hub at container startup.
+
+### Setting up HuggingFace Hub
+
+1. Create a HuggingFace account at https://huggingface.co/
+2. Create repositories for your models and ChromaDB:
+   - Create a repository for models (e.g., `your-username/astra-models`)
+   - Upload your model directories (`bge-large_finetuned/`, `bge-small_finetuned/`) to this repository
+   - Create a repository for ChromaDB (e.g., `your-username/astra-chromadb`)
+   - Compress your `.chroma/` directory and upload it as `chromadb.tar.gz` or `chromadb.zip`
+
+3. Set environment variables when running Docker:
+   ```bash
+   docker run -e HF_MODELS_REPO=your-username/astra-models \
+              -e HF_CHROMADB_REPO=your-username/astra-chromadb \
+              -e HF_TOKEN=your_hf_token \
+              -e GROQ_API_KEY=your_groq_key \
+              -p 8501:8501 your-image-name
+   ```
+
+   Or use a `.env` file with Docker Compose or `--env-file` flag.
+
+### Local Development
+
+For local development, you can place models and ChromaDB files in the local directories:
+- Models go in `models/` directory
+- ChromaDB goes in `.chroma/` directory
+
+The code will automatically use local files if available, falling back to HuggingFace Hub if not found.
+
+## Project Structure
 
 ```
 astra

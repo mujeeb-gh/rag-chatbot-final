@@ -9,7 +9,7 @@ load_dotenv()
 
 CHAT_MODEL = Literal["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
 groq_api_key = os.getenv('GROQ_API_KEY')
-openrouter_api_key = os.getenv('OPENROUTER_API_KEY')
+openrouter_api_key = settings.openrouter_api_key
 
 client = Groq(
     api_key=groq_api_key,

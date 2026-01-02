@@ -1,0 +1,29 @@
+# Ignore local environments
+venv/
+.venv/
+env/
+
+# Ignore Python cache
+**/__pycache__/
+*.pyc
+
+# Ignore large data or logs
+*.log
+data/
+*.csv
+*.sqlite
+
+# Ignore Git history
+.git
+.gitignore
+
+# Ignore local IDE settings
+.vscode/
+.idea/
+
+
+# Models anf embeddings
+.chroma/
+embeddings/
+data/
+models/
