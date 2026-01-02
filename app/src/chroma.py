@@ -4,9 +4,9 @@ from chromadb import Collection, QueryResult
 from chromadb.api import ClientAPI
 from pandas import DataFrame
 from src.sentence import sentence_embed
-from src.settings import CHROMA_COLLECTION, CHROMA_DIR
+from src.settings import CHROMA_COLLECTION, CHROMA_DB
 
-chroma_client: ClientAPI = chromadb.PersistentClient(path=CHROMA_DIR)
+chroma_client: ClientAPI = chromadb.PersistentClient(path=CHROMA_DB)
 chroma_collection: Collection = chroma_client.get_or_create_collection(
     name=CHROMA_COLLECTION, metadata={"hnsw:space": "cosine"}
 )

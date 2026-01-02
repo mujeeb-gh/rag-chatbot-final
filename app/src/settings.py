@@ -8,9 +8,10 @@ load_dotenv(find_dotenv())
 
 SRC_DIR: str = os.path.dirname(__file__)
 DATA_DIR: str = os.path.join(SRC_DIR, "../../data")
-CHROMA_DIR: str = os.path.join(SRC_DIR, "../../.chroma")
 MODELS_DIR: str = os.path.join(SRC_DIR, "../../models")
-CHROMA_COLLECTION: str = "bge_small_finetuned_astra_collection_10k"
+CHROMA_DIR: str = os.path.join(SRC_DIR, "../../.chroma")
+CHROMA_DB: str = os.path.join(CHROMA_DIR, "bge-small-finetuned-chroma")
+CHROMA_COLLECTION: str =  "bge_small_finetuned_astra_collection" # use bge_small_finetuned_astra_collection for the bege-large model and embeddings
 
 
 class Settings(BaseSettings):
