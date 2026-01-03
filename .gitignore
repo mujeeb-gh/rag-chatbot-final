@@ -17,6 +17,7 @@ venv/
 
 .chroma/
 embeddings/
+chromadb.tar.gz
 data/
 models/
 other_models/

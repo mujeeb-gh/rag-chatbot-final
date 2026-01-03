@@ -8,6 +8,7 @@ import sys
 import tarfile
 import zipfile
 from pathlib import Path
+from src.settings import settings
 
 try:
     from huggingface_hub import snapshot_download, hf_hub_download
@@ -84,7 +85,8 @@ def download_chromadb(chromadb_repo: str, chromadb_dir: Path, hf_token: str | No
     print(f"Checking ChromaDB in {chromadb_dir}...")
     
     # Check if ChromaDB directory already has content
-    if chromadb_dir.exists() and any(chromadb_dir.iterdir()):
+    expected_chroma_path = chromadb_dir / settings.chroma_db
+    if expected_chroma_path.exists() and any(expected_chroma_path.iterdir()):
         print(f"ChromaDB directory already contains files. Skipping download.")
         print(f"To force re-download, delete {chromadb_dir} and restart.")
         return
