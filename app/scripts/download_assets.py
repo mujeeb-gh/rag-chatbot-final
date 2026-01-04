@@ -8,7 +8,7 @@ import sys
 import tarfile
 import zipfile
 from pathlib import Path
-from src.settings import settings
+from src.settings import HF_MODELS_REPO, HF_CHROMADB_REPO, settings
 
 try:
     from huggingface_hub import snapshot_download, hf_hub_download
@@ -179,8 +179,8 @@ def main():
     chromadb_dir = project_root / ".chroma"
     
     # Get configuration from environment variables
-    models_repo = os.getenv("HF_MODELS_REPO", "")
-    chromadb_repo = os.getenv("HF_CHROMADB_REPO", "")
+    models_repo = HF_MODELS_REPO
+    chromadb_repo = HF_CHROMADB_REPO
     hf_token = os.getenv("HF_TOKEN", None)
     
     # Download models

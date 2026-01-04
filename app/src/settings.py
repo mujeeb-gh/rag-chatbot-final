@@ -12,8 +12,6 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     openrouter_api_key: str = ""
     # HuggingFace Hub configuration
-    hf_models_repo: str = os.getenv("HF_MODELS_REPO", "")
-    hf_chromadb_repo: str = os.getenv("HF_CHROMADB_REPO", "")
     hf_token: str = os.getenv("HF_TOKEN", "")
     
     chroma_db: str = os.getenv("CHROMA_DB", "")
@@ -27,4 +25,6 @@ DATA_DIR: str = os.path.join(SRC_DIR, "../../data")
 MODELS_DIR: str = os.path.join(SRC_DIR, "../../models")
 CHROMA_DIR: str = os.path.join(SRC_DIR, "../../.chroma")
 CHROMA_DB: str = os.path.join(CHROMA_DIR, settings.chroma_db)
-CHROMA_COLLECTION: str =  settings.chroma_collection 
+CHROMA_COLLECTION: str =  settings.chroma_collection
+HF_MODELS_REPO: str = "NenJa/astra-models"
+HF_CHROMADB_REPO: str = "NenJa/astra-chromadb"
