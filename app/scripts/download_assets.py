@@ -121,7 +121,7 @@ def download_chromadb(chromadb_repo: str, chromadb_dir: Path, hf_token: str | No
                         
                         # If archive contains .chroma subdirectory, move contents up
                         extracted_chroma = chromadb_dir.parent / ".chroma"
-                        if extracted_chroma.exists() and extracted_chroma.is_dir():
+                        if extracted_chroma.exists() and extracted_chroma != chromadb_dir:
                             # Move contents from .chroma to chromadb_dir
                             for item in extracted_chroma.iterdir():
                                 shutil.move(str(item), str(chromadb_dir / item.name))
