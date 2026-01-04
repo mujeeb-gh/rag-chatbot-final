@@ -1,3 +1,14 @@
+---
+title: Astra
+emoji: 📉
+colorFrom: pink
+colorTo: gray
+sdk: docker
+pinned: false
+license: mit
+short_description: Chatbot for Scholarly Research using RAG
+---
+
 # Astra
 
 
