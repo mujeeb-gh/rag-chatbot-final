@@ -15,13 +15,8 @@ COPY . .
 
 ENV PYTHONPATH=/app/app
 
-# Create entrypoint script
-RUN echo '#!/bin/bash\n\
-python3 -m app.scripts.download_assets\n\
-exec streamlit run app/main.py --server.port=8501 --server.address=0.0.0.0\n\
-' > /entrypoint.sh && chmod +x /entrypoint.sh
 
 EXPOSE 8501
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["python3", "-m", "app.scripts.entrypoint"]
