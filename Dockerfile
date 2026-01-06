@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
     
+ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 ENV PYTHONPATH=/app/app
 
 # Download assets DURING BUILD (cached layer)
