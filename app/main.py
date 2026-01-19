@@ -10,7 +10,7 @@ st.set_page_config(page_title="Chat-B.O.A", page_icon="🗨️", layout="centere
 st.title(":grey[Chat-B.O.A]")
 st.subheader("Development of a Chatbot for Scholarly Research using Retrieval Augmented Generation \n Balogun Olamide Abdulmujeeb \n\n 20/SCI01/042", divider="grey", anchor=False)
 
-disclaimer = "Disclaimer: This chatbot is specifically for natural language processing research and retrieves information from 2022 ACL Anthology papers only."
+disclaimer = "Disclaimer: This chatbot is specifically for natural language processing research and retrieves information from 2022 ACL Anthology paper abstracts only."
 
 if "messages" not in st.session_state:
     _messages: list[Any] = []
