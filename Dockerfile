@@ -32,8 +32,9 @@ RUN python3 -m app.scripts.download_assets || \
 COPY . .
 
 
-EXPOSE 8501
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
+ENV PORT=7860
+EXPOSE 7860
+HEALTHCHECK CMD sh -c "curl --fail http://localhost:${PORT:-7860}/_stcore/health || exit 1"
 
 # Just start Streamlit - assets already present
-ENTRYPOINT ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["sh", "-c", "streamlit run app/main.py --server.port=${PORT:-7860} --server.address=0.0.0.0"]
