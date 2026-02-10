@@ -112,3 +112,5 @@ astra
 └─ requirements.txt
 
 ```
+docker build -t astra
+docker run -p 7860:7860 astra 

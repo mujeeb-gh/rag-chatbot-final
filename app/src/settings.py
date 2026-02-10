@@ -14,8 +14,8 @@ class Settings(BaseSettings):
     # HuggingFace Hub configuration
     hf_token: str = os.getenv("HF_TOKEN", "")
     
-    chroma_db: str = os.getenv("CHROMA_DB", "")
-    chroma_collection: str = os.getenv("CHROMA_COLLECTION", "")
+    chroma_db: str = os.getenv("CHROMA_DB", "bge-small-finetuned-chroma")
+    chroma_collection: str = os.getenv("CHROMA_COLLECTION", "bge_small_finetuned_astra_collection")
 
 
 settings = Settings()
