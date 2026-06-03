@@ -1,5 +1,8 @@
 from typing import Literal, Any
-from mistralai import Mistral
+try:
+    from mistralai.client import Mistral
+except ImportError:
+    from mistralai import Mistral
 from openai import OpenAI, InternalServerError as OpenaiInternalServerError
 from src.settings import settings
 from dotenv import load_dotenv
