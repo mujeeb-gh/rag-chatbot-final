@@ -20,7 +20,7 @@ To setup this project locally, you need to have a `.env` file in the root direct
 ### Environment Variables
 
 Required for API keys:
-- `GROQ_API_KEY`: Your Groq API key (for LLM)
+- `MISTRAL_API_KEY`: Your Mistral AI API key (for LLM)
 - `OPENAI_API_KEY`: Your OpenAI API key (optional, for OpenAI models)
 - `COHERE_API_KEY`: Your Cohere API key (optional)
 
@@ -59,7 +59,7 @@ The Dockerfile is configured to automatically download models and ChromaDB embed
    docker run -e HF_MODELS_REPO=your-username/astra-models \
               -e HF_CHROMADB_REPO=your-username/astra-chromadb \
               -e HF_TOKEN=your_hf_token \
-              -e GROQ_API_KEY=your_groq_key \
+              -e MISTRAL_API_KEY=your_mistral_key \
               -p 8501:8501 your-image-name
    ```
 
@@ -114,3 +114,18 @@ astra
 ```
 docker build -t astra
 docker run -p 7860:7860 astra 
+```
+
+## Model Migration & Deprecation Details
+
+This application has been migrated from calling Groq (and Mixtral 8x7B via OpenRouter) to calling the official **Mistral AI API** directly. 
+
+### Why Mixtral 8x7B Was Deprecated
+* **Groq:** Officially deprecated `mixtral-8x7b-32768` on **March 20, 2025**, directing system resources toward newer, higher-performing models like the Llama 3 series.
+* **Mistral AI:** Retired its managed endpoints for Mixtral 8x7B on **March 30, 2025**, advising users to transition to more modern, optimized model offerings.
+
+### Migration Target: Mistral Small 4 (`mistral-small-2603`)
+The application now uses **Mistral Small 4** (`mistral-small-2603`), which was released on **March 15, 2026**. This model provides a massive upgrade over Mixtral 8x7B:
+* **Unified MoE Architecture:** Combines Mistral's general Instruct, Magistral (reasoning/logic), and Devstral (coding/agentic) capabilities.
+* **State-of-the-Art Quality:** Offers a **256k context window** with higher logical accuracy and reasoning capabilities.
+* **Highly Cost-Efficient:** Extremely low operational pricing at $0.15/M input tokens and $0.60/M output tokens.

@@ -1,5 +1,5 @@
-from typing import Literal 
-from groq import Groq, InternalServerError
+from typing import Literal, Any
+from mistralai import Mistral
 from openai import OpenAI, InternalServerError as OpenaiInternalServerError
 from src.settings import settings
 from dotenv import load_dotenv
@@ -7,37 +7,33 @@ import os
 
 load_dotenv()
 
-CHAT_MODEL = Literal["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it"]
-groq_api_key = os.getenv('GROQ_API_KEY')
+CHAT_MODEL = Literal["llama3-8b-8192", "llama3-70b-8192", "mixtral-8x7b-32768", "gemma-7b-it", "mistral-small-2603"]
+mistral_api_key = os.getenv('MISTRAL_API_KEY') or settings.mistral_api_key
 openrouter_api_key = settings.openrouter_api_key
-
-client = Groq(
-    api_key=groq_api_key,
-)
 
 openrouter_client = OpenAI(
     base_url = "https://openrouter.ai/api/v1",
     api_key=openrouter_api_key
 )
 
-def groq_chat(
+def mistral_chat(
     message: str,
     preamble: str,
-    model: CHAT_MODEL = "mixtral-8x7b-32768",
+    model: CHAT_MODEL = "mistral-small-2603",
     temperature: float = 0.5,
     max_tokens: int = 1024,
     top_p: float = 1,
     stop: str | None = None,
     stream: bool = False,
     chat_history: list[dict] | None = None,
-) -> dict:
+) -> Any:
     """
-    Sends a chat message to the Groq LLM and returns the response.
+    Sends a chat message to the Mistral AI LLM and returns the response.
 
     Args:
         message (str): The user message to be sent to the LLM.
         preamble (str): The system message that sets the behavior of the assistant.
-        model (str, optional): The language model which will generate the completion. Defaults to "mixtral-8x7b-32768".
+        model (str, optional): The language model which will generate the completion. Defaults to "mistral-small-2603".
         temperature (float, optional): Controls randomness. Defaults to 0.5.
         max_tokens (int, optional): The maximum number of tokens to generate. Defaults to 1024.
         top_p (float, optional): Controls diversity via nucleus sampling. Defaults to 1.
@@ -46,7 +42,7 @@ def groq_chat(
         chat_history (list[dict] | None, optional): The chat history to be used for the conversation. Defaults to None.
 
     Returns:
-        dict: The response from the LLM.
+        Any: The response from the LLM or an error dictionary.
     """
     # Prepare the messages for the chat completion
     messages = []
@@ -63,20 +59,20 @@ def groq_chat(
 
     # Create the chat completion
     try:
-        chat_completion = client.chat.completions.create(
-            messages=messages,
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            top_p=top_p,
-            stop=stop,
-            stream=stream,
-        )
+        with Mistral(api_key=mistral_api_key) as client:
+            chat_completion = client.chat.complete(
+                messages=messages,
+                model=model,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                top_p=top_p,
+                stop=[stop] if isinstance(stop, str) else stop,
+            )
 
-        # Return the response
-        return chat_completion
-    except InternalServerError:
-        return{"error": "Groq server is currently unavailable. Please try again later."}
+            # Return the response
+            return chat_completion
+    except Exception as e:
+        return {"error": f"Mistral AI server is currently unavailable: {str(e)}"}
 
 def openrouter_chat(
     message: str,
@@ -115,11 +111,11 @@ def openrouter_chat(
         # Return the response
         return chat_completion
     except OpenaiInternalServerError:
-        return{"error": "Groq server is currently unavailable. Please try again later."}
+        return {"error": "OpenRouter server is currently unavailable. Please try again later."}
 
 
 # # Example usage
-# response = groq_chat(
+# response = mistral_chat(
 #     message="Tell me a joke",
 #     preamble="you are a helpful assistant."
 # )

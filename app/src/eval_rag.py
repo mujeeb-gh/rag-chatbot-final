@@ -2,7 +2,7 @@
 # sys.path.append('app/src')
 
 from astra import astra_rag_eval
-from llm import groq_chat, CHAT_MODEL
+from llm import mistral_chat, CHAT_MODEL
 from chroma import search_eval
 from typing import Any
 
@@ -18,7 +18,7 @@ import json
 from tqdm import tqdm
 import time
 
-def generate_responses_llm(questions_file: str, output_file: str, model: CHAT_MODEL="mixtral-8x7b-32768", batch_size: int = 30, delay_between_batches: int = 10):
+def generate_responses_llm(questions_file: str, output_file: str, model: CHAT_MODEL="mistral-small-2603", batch_size: int = 30, delay_between_batches: int = 10):
     """
     Generate responses using the LLM for each question in the input file and save them to the output file.
     """
@@ -33,7 +33,7 @@ def generate_responses_llm(questions_file: str, output_file: str, model: CHAT_MO
             batch_questions = questions[i:i+batch_size]
             for question in batch_questions:
                 # Generate response using LLM
-                answer = groq_chat(
+                answer = mistral_chat(
                     message=question,
                     preamble=LLM_ANSWER_GEN_TEMPLATE,  # Use a short prompt template
                     model=model,
@@ -53,7 +53,7 @@ from typing import Any
 from tqdm import tqdm
 import time
 
-def generate_responses_rag(questions_file: str, output_file: str, model: CHAT_MODEL="mixtral-8x7b-32768", batch_size: int = 30, delay_between_batches: int = 10):
+def generate_responses_rag(questions_file: str, output_file: str, model: CHAT_MODEL="mistral-small-2603", batch_size: int = 30, delay_between_batches: int = 10):
     """
     Generate responses using the LLM for each question in the input file and save them to the output file.
     """

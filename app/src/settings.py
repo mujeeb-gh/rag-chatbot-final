@@ -8,7 +8,7 @@ load_dotenv(find_dotenv())
 
 class Settings(BaseSettings):
     cohere_api_key: str = ""
-    groq_api_key: str = ""
+    mistral_api_key: str = ""
     openai_api_key: str = ""
     openrouter_api_key: str = ""
     # HuggingFace Hub configuration

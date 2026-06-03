@@ -1,6 +1,6 @@
 import time
 import streamlit
-from src.llm import groq_chat, openrouter_chat
+from src.llm import mistral_chat
 from src.template import CHAT_TEMPLATE, INTENT_CLASSIFIER_TEMPLATE, RAG_TEMPLATE, RAG_EVAL_TEMPLATE
 
 
@@ -49,10 +49,9 @@ def astra_chat(message: str, chat_history: list[dict] | None = None) -> str:
     Returns:
         str: The response from the chatbot.
     """
-    return openrouter_chat(
+    return mistral_chat(
         message=message,
         preamble=CHAT_TEMPLATE,
-        # model="mixtral-8x7b-32768",
         chat_history=chat_history,
     ).choices[0].message.content
 
@@ -72,10 +71,9 @@ def astra_rag(
         str: The generated response.
 
     """
-    return openrouter_chat(
+    return mistral_chat(
         message=prompt,
         preamble=RAG_TEMPLATE.format(context="\n\n".join(context)),
-        # model="mixtral-8x7b-32768",
         chat_history=chat_history,
     ).choices[0].message.content
 
@@ -95,10 +93,9 @@ def astra_rag_eval(
         str: The generated response.
 
     """
-    return openrouter_chat(
+    return mistral_chat(
         message=prompt,
         preamble=RAG_EVAL_TEMPLATE.format(context="\n\n".join(context)),
-        # model="mixtral-8x7b-32768",
         chat_history=chat_history,
     ).choices[0].message.content
 
@@ -113,15 +110,14 @@ def astra_intent_classifier(prompt: str) -> str:
         str: The classified intent.
 
     """
-    response = openrouter_chat(
+    response = mistral_chat(
         message=prompt,
         preamble=INTENT_CLASSIFIER_TEMPLATE.format(
             intents="- ".join([f"{intent}\n" for intent in CLASSIFIER_INTENTS])
         ),
-        # model="mixtral-8x7b-32768",
     )
     
-    if "error" in response:
+    if isinstance(response, dict) and "error" in response:
         # Handle the error gracefully by returning a default message or intent
         return response["error"]
     
